@@ -1,18 +1,3 @@
-export type EventType = "FREE" | "STAKE";
-
-export interface EventMetadata {
-  id: string;
-  title: string;
-  description?: string;
-  location?: string;
-  datetime: string;
-  type: EventType;
-  depositAmountUSDC?: string;
-  organizerAddress: `0x${string}`;
-  createdAt: string;
-  onChainEventId?: string; // Links to on-chain event ID if STAKE type
-}
-
 export interface Event {
   id: bigint;
   organizer: string;
@@ -35,8 +20,6 @@ export interface EventFormData {
   description: string;
   location: string;
   datetime: string;
-  type: EventType;
   depositAmount: string;
 }
-
 

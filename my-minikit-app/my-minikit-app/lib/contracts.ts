@@ -24,4 +24,3 @@ export const USDC_ABI = [
   "function decimals() external view returns (uint8)",
 ] as const;
 
-

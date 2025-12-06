@@ -243,4 +243,3 @@ contract EventStaking is Ownable {
     }
 }
 
-

@@ -35,11 +35,11 @@ export default function Home() {
             No flakes, just stakes
           </p>
           <p className="text-lg text-gray-300 mb-4 max-w-2xl mx-auto font-light leading-relaxed">
-            Create events with optional staking. Choose free RSVP or stake to commit.
+            Commit with crypto. Show up and get rewarded.
           </p>
           <p className="text-sm text-gray-400 mb-12 max-w-xl mx-auto font-light">
-            <strong className="text-white">Free Plan:</strong> Simple RSVP, no commitment required.<br />
-            <strong className="text-white">No Flake Plan:</strong> Stake USDC to commit. No-shows forfeit their deposit, which supports the bill for others.
+            Participants stake USDC to commit. No-shows forfeit their deposit. 
+            Attendees split the pot. Simple, transparent, effective.
           </p>
           
           {fid && (
@@ -74,9 +74,9 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Create Events</h3>
+            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Create Event</h3>
             <p className="text-gray-300 text-sm font-light leading-relaxed">
-              Choose between Free Plan (simple RSVP) or No Flake Plan (stake to commit). Set details, location, and time.
+              Organize your meetup and set a deposit amount. Higher stakes attract more committed participants.
             </p>
           </div>
           
@@ -86,9 +86,9 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Join & Commit</h3>
+            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Join & Stake</h3>
             <p className="text-gray-300 text-sm font-light leading-relaxed">
-              For No Flake events, stake USDC to commit. Your deposit ensures you show up, or it supports others who do.
+              Participants stake USDC to commit. The deposit is locked until the event concludes.
             </p>
           </div>
           
@@ -98,9 +98,9 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Show Up & Get Rewarded</h3>
+            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Check In & Settle</h3>
             <p className="text-gray-300 text-sm font-light leading-relaxed">
-              Check in at the event. For No Flake events, attendees split the pot from no-shows. Simple and fair.
+              Attendees check in at the event. The organizer settles and distributes deposits to those who showed up.
             </p>
           </div>
         </div>
@@ -112,22 +112,22 @@ export default function Home() {
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-sm">1</div>
                 <div>
-                  <h4 className="text-white font-medium mb-1">Choose Your Plan</h4>
-                  <p className="text-gray-300 text-sm font-light">Create a Free event (simple RSVP) or a No Flake event (stake USDC to commit).</p>
+                  <h4 className="text-white font-medium mb-1">Event Creation</h4>
+                  <p className="text-gray-300 text-sm font-light">Organizers create events with a required deposit amount in USDC.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-sm">2</div>
                 <div>
-                  <h4 className="text-white font-medium mb-1">Join & Commit</h4>
-                  <p className="text-gray-300 text-sm font-light">For Free events, simply RSVP. For No Flake events, stake USDC to show you're serious.</p>
+                  <h4 className="text-white font-medium mb-1">Participation</h4>
+                  <p className="text-gray-300 text-sm font-light">Participants stake USDC to join. Deposits are held in escrow until settlement.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-sm">3</div>
                 <div>
-                  <h4 className="text-white font-medium mb-1">Show Up & Benefit</h4>
-                  <p className="text-gray-300 text-sm font-light">Attendees check in at the event. For No Flake events, those who show up split the pot from no-shows.</p>
+                  <h4 className="text-white font-medium mb-1">Check-In & Settlement</h4>
+                  <p className="text-gray-300 text-sm font-light">Attendees check in at the event time. The organizer settles and distributes deposits to checked-in participants.</p>
                 </div>
               </div>
             </div>

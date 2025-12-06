@@ -73,4 +73,3 @@ describe("EventStaking", function () {
   });
 });
 
-

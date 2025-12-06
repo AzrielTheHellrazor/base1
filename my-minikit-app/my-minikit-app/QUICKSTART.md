@@ -118,4 +118,3 @@ my-minikit-app/
 
 **Ready to go! Just `bun run dev` and start building! 🎉**
 
-
