@@ -20,8 +20,8 @@ export const minikitConfig = {
   miniapp: {
     version: "1",
     name: "noFlake",
-    subtitle: "No flakes, just stakes",
-    description: "noFlake - Where commitment meets crypto. Say goodbye to last-minute cancellations and hello to reliable meetups!",
+    subtitle: "Turn casual maybes into real commitments",
+    description: "noFlake lets you host free events or stake-backed \"no-flake\" events on Base. Share a simple link, collect the info you need from guests, and turn casual maybes into real commitments.",
     screenshotUrls: [],
     iconUrl: `${ROOT_URL}/icon.png`,
     splashImageUrl: `${ROOT_URL}/splash.png`,
@@ -31,9 +31,9 @@ export const minikitConfig = {
     primaryCategory: "utility",
     tags: ["farcaster", "base", "blockchain", "events", "staking"],
     heroImageUrl: `${ROOT_URL}/hero.png`,
-    tagline: "No flakes, just stakes. Show up and get paid!",
-    ogTitle: "noFlake - No Flakes, Just Stakes",
-    ogDescription: "Where commitment meets crypto. Say goodbye to last-minute cancellations!",
+    tagline: "Turn casual maybes into real commitments",
+    ogTitle: "noFlake - Stake-Backed Events on Base",
+    ogDescription: "noFlake lets you host free events or stake-backed \"no-flake\" events on Base. Share a simple link, collect the info you need from guests, and turn casual maybes into real commitments.",
     ogImageUrl: `${ROOT_URL}/hero.png`,
   },
 } as const;

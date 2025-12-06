@@ -6,10 +6,10 @@ import { parseUnits, formatUnits, decodeEventLog } from "viem";
 import { EVENT_STAKING_ADDRESS, EVENT_STAKING_ABI, USDC_ADDRESS, USDC_ABI } from "@/lib/contracts";
 import { useReadContract } from "wagmi";
 import { EventStorage } from "@/lib/eventStorage";
-import { EventType } from "@/lib/types";
+import { EventType, ParticipantFieldConfig, ParticipantFieldId, ParticipantFieldType } from "@/lib/types";
 import Link from "next/link";
 
-type Step = "plan-selection" | "event-details";
+type Step = "plan-selection" | "event-details" | "participant-fields";
 
 export default function CreateEventPage() {
   const router = useRouter();
@@ -22,6 +22,7 @@ export default function CreateEventPage() {
     datetime: "",
     type: null as EventType | null,
     depositAmount: "5",
+    participantFields: [] as ParticipantFieldConfig[],
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -49,6 +50,60 @@ export default function CreateEventPage() {
   const handlePlanSelect = (planType: EventType) => {
     setFormData({ ...formData, type: planType });
     setStep("event-details");
+  };
+
+  const handleEventDetailsNext = () => {
+    setStep("participant-fields");
+  };
+
+  const addParticipantField = (fieldId: ParticipantFieldId, label: string, type: ParticipantFieldType, required: boolean) => {
+    setFormData({
+      ...formData,
+      participantFields: [
+        ...formData.participantFields,
+        { id: fieldId, label, type, required }
+      ]
+    });
+  };
+
+  const removeParticipantField = (index: number) => {
+    setFormData({
+      ...formData,
+      participantFields: formData.participantFields.filter((_, i) => i !== index)
+    });
+  };
+
+  const updateParticipantField = (index: number, updates: Partial<ParticipantFieldConfig>) => {
+    setFormData({
+      ...formData,
+      participantFields: formData.participantFields.map((field, i) => 
+        i === index ? { ...field, ...updates } : field
+      )
+    });
+  };
+
+  const handleEventDetailsSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    
+    if (!formData.title.trim()) {
+      setError("Event title is required");
+      return;
+    }
+
+    if (!formData.type) {
+      setError("Please select an event type");
+      return;
+    }
+
+    const startTime = Math.floor(new Date(formData.datetime).getTime() / 1000);
+    if (startTime <= Math.floor(Date.now() / 1000)) {
+      setError("Event time must be in the future");
+      return;
+    }
+
+    // Move to participant fields step
+    setStep("participant-fields");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,6 +164,7 @@ export default function CreateEventPage() {
           datetime: new Date(formData.datetime).toISOString(),
           type: "FREE",
           organizerAddress: address as `0x${string}`,
+          participantFields: formData.participantFields.length > 0 ? formData.participantFields : undefined,
         });
 
         setSuccess(`Free event "${eventMetadata.title}" created successfully!`);
@@ -153,6 +209,7 @@ export default function CreateEventPage() {
                 depositAmountUSDC: formData.depositAmount,
                 organizerAddress: address as `0x${string}`,
                 onChainEventId,
+                participantFields: formData.participantFields.length > 0 ? formData.participantFields : undefined,
               });
 
               setSuccess(`Event "${eventMetadata.title}" created successfully!`);
@@ -163,60 +220,69 @@ export default function CreateEventPage() {
             }
           } catch (decodeError) {
             // If decoding fails, try extracting from topics directly
-            if (eventCreatedLog.topics && eventCreatedLog.topics.length >= 2) {
+            if (eventCreatedLog.topics && eventCreatedLog.topics.length >= 2 && address) {
               const eventIdHex = eventCreatedLog.topics[1];
-              const onChainEventId = BigInt(eventIdHex).toString();
+              if (eventIdHex && typeof eventIdHex === 'string') {
+                const onChainEventId = BigInt(eventIdHex).toString();
 
-              const eventMetadata = EventStorage.createEvent({
-                title: formData.title,
-                description: formData.description || undefined,
-                location: formData.location || undefined,
-                datetime: new Date(formData.datetime).toISOString(),
-                type: "STAKE",
-                depositAmountUSDC: formData.depositAmount,
-                organizerAddress: address as `0x${string}`,
-                onChainEventId,
-              });
+                const eventMetadata = EventStorage.createEvent({
+                  title: formData.title,
+                  description: formData.description || undefined,
+                  location: formData.location || undefined,
+                  datetime: new Date(formData.datetime).toISOString(),
+                  type: "STAKE",
+                  depositAmountUSDC: formData.depositAmount,
+                  organizerAddress: address as `0x${string}`,
+                  onChainEventId,
+                  participantFields: formData.participantFields.length > 0 ? formData.participantFields : undefined,
+                });
 
-              setSuccess(`Event "${eventMetadata.title}" created successfully!`);
-              setTimeout(() => {
-                router.push(`/events/${eventMetadata.id}`);
-              }, 1500);
-              return;
+                setSuccess(`Event "${eventMetadata.title}" created successfully!`);
+                setTimeout(() => {
+                  router.push(`/events/${eventMetadata.id}`);
+                }, 1500);
+                return;
+              }
             }
           }
         }
 
         // Fallback: create metadata without linking
-        const eventMetadata = EventStorage.createEvent({
-          title: formData.title,
-          description: formData.description || undefined,
-          location: formData.location || undefined,
-          datetime: new Date(formData.datetime).toISOString(),
-          type: "STAKE",
-          depositAmountUSDC: formData.depositAmount,
-          organizerAddress: address as `0x${string}`,
-        });
-        setSuccess(`Event "${eventMetadata.title}" created!`);
-        setTimeout(() => {
-          router.push("/events");
-        }, 2000);
+        if (address) {
+          const eventMetadata = EventStorage.createEvent({
+            title: formData.title,
+            description: formData.description || undefined,
+            location: formData.location || undefined,
+            datetime: new Date(formData.datetime).toISOString(),
+            type: "STAKE",
+            depositAmountUSDC: formData.depositAmount,
+            organizerAddress: address as `0x${string}`,
+            participantFields: formData.participantFields.length > 0 ? formData.participantFields : undefined,
+          });
+          setSuccess(`Event "${eventMetadata.title}" created!`);
+          setTimeout(() => {
+            router.push("/events");
+          }, 2000);
+        }
       } catch (error) {
         console.error("Error parsing event creation:", error);
         // Still create metadata
-        const eventMetadata = EventStorage.createEvent({
-          title: formData.title,
-          description: formData.description || undefined,
-          location: formData.location || undefined,
-          datetime: new Date(formData.datetime).toISOString(),
-          type: "STAKE",
-          depositAmountUSDC: formData.depositAmount,
-          organizerAddress: address as `0x${string}`,
-        });
-        setSuccess(`Event "${eventMetadata.title}" created!`);
-        setTimeout(() => {
-    router.push("/events");
-        }, 2000);
+        if (address) {
+          const eventMetadata = EventStorage.createEvent({
+            title: formData.title,
+            description: formData.description || undefined,
+            location: formData.location || undefined,
+            datetime: new Date(formData.datetime).toISOString(),
+            type: "STAKE",
+            depositAmountUSDC: formData.depositAmount,
+            organizerAddress: address as `0x${string}`,
+            participantFields: formData.participantFields.length > 0 ? formData.participantFields : undefined,
+          });
+          setSuccess(`Event "${eventMetadata.title}" created!`);
+          setTimeout(() => {
+            router.push("/events");
+          }, 2000);
+        }
       }
     }
   }, [isSuccess, receipt, formData, address, router]);
@@ -266,7 +332,7 @@ export default function CreateEventPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   <p className="text-gray-300 font-light leading-relaxed">
-                    <strong className="text-white">Zero commitment</strong> — Simple RSVP system for casual meetups
+                    <strong className="text-white">Zero commitment</strong> — Simple <strong>RSVP (Confirmation of Attendance)</strong> system for casual meetups
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
@@ -290,7 +356,7 @@ export default function CreateEventPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   <p className="text-gray-300 font-light leading-relaxed">
-                    <strong className="text-white">No gas fees</strong> — Event metadata stored off-chain, instant creation
+                    <strong className="text-white">Zero Fees & Instant Setup</strong> — Event details are kept simple and off the main network, ensuring instant creation with no gas fees (gas-free).
                   </p>
                 </div>
               </div>
@@ -311,7 +377,7 @@ export default function CreateEventPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 </div>
-                <h2 className="text-3xl font-light text-white mb-3 tracking-tight">No Flake Plan</h2>
+                <h2 className="text-3xl font-light text-white mb-3 tracking-tight">noFlake Plan</h2>
                 <div className="inline-block px-4 py-1.5 rounded-full bg-purple-500/20 text-purple-300 text-sm font-medium mb-4">
                   Staking Required
                 </div>
@@ -352,7 +418,7 @@ export default function CreateEventPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   <p className="text-gray-300 font-light leading-relaxed">
-                    <strong className="text-white">Perfect for</strong> — Paid dinners, ticketed events, exclusive meetups
+                    <strong className="text-white">Perfect for High-Commitment Events</strong> — Use it with friends, clubs, or exclusive groups for paid dinners, ticketed events, and more!
                   </p>
                 </div>
               </div>
@@ -361,7 +427,7 @@ export default function CreateEventPage() {
                 onClick={() => handlePlanSelect("STAKE")}
                 className="w-full bg-purple-500/20 hover:bg-purple-500/30 border-2 border-purple-400/40 text-white px-8 py-4 rounded-xl font-medium transition-all group-hover:border-purple-400/60"
               >
-                Choose No Flake Plan
+                Choose noFlake Plan
               </button>
             </div>
           </div>
@@ -371,7 +437,8 @@ export default function CreateEventPage() {
   }
 
   // Event Details Form Step
-  return (
+  if (step === "event-details") {
+    return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
       <div className="container mx-auto px-6 py-12 max-w-2xl">
         <div className="mb-8">
@@ -391,7 +458,7 @@ export default function CreateEventPage() {
                   ? "bg-blue-500/20 text-blue-300"
                   : "bg-purple-500/20 text-purple-300"
               }`}>
-                {formData.type === "FREE" ? "Free Plan" : "No Flake Plan"}
+                {formData.type === "FREE" ? "Free Plan" : "noFlake Plan"}
               </span>
             </div>
             <h1 className="text-5xl font-light text-white mb-3 tracking-tight">Event Details</h1>
@@ -426,7 +493,7 @@ export default function CreateEventPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleEventDetailsSubmit} className="space-y-6">
           <div>
             <label className="block text-white font-medium mb-3 text-sm tracking-tight">
               Event Title
@@ -522,25 +589,197 @@ export default function CreateEventPage() {
           <div className="flex gap-4 pt-4">
             <button
               type="submit"
-              disabled={(formData.type === "STAKE" && (isCreating || isConfirming || !isConnected)) || !!success}
-              className="flex-1 bg-white text-purple-900 px-6 py-3.5 rounded-xl font-medium hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              className="flex-1 bg-white text-purple-900 px-6 py-3.5 rounded-xl font-medium hover:bg-gray-50 transition-all shadow-lg"
             >
-              {formData.type === "STAKE" && (isCreating || isConfirming)
-                ? "Creating..."
-                : success
-                ? "Created!"
-                : "Create Event"}
+              Next: Configure Participant Fields
             </button>
             <button
               type="button"
-              onClick={() => router.back()}
+              onClick={() => setStep("plan-selection")}
               className="px-6 py-3.5 rounded-xl font-medium bg-white/5 text-white hover:bg-white/10 transition-all border border-white/10"
             >
-              Cancel
+              Back
             </button>
           </div>
         </form>
       </div>
     </div>
   );
+  }
+
+  // Participant Fields Configuration Step
+  if (step === "participant-fields") {
+    const predefinedFields: { id: ParticipantFieldId; label: string; type: ParticipantFieldType }[] = [
+      { id: "name", label: "Full Name", type: "text" },
+      { id: "email", label: "Email", type: "email" },
+      { id: "phone", label: "Phone Number", type: "phone" },
+      { id: "walletAddress", label: "Wallet Address", type: "wallet" },
+      { id: "telegram", label: "Telegram", type: "social" },
+      { id: "farcaster", label: "Farcaster", type: "social" },
+      { id: "note", label: "Additional Notes", type: "textarea" },
+    ];
+
+    const addPredefinedField = (fieldId: ParticipantFieldId) => {
+      const field = predefinedFields.find(f => f.id === fieldId);
+      if (field && !formData.participantFields.find(f => f.id === fieldId)) {
+        addParticipantField(fieldId, field.label, field.type, false);
+      }
+    };
+
+    const addCustomField = () => {
+      const customId = `custom_${Date.now()}` as ParticipantFieldId;
+      addParticipantField(customId, "Custom Field", "text", false);
+    };
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <div className="container mx-auto px-6 py-12 max-w-3xl">
+          <div className="mb-8">
+            <button
+              onClick={() => setStep("event-details")}
+              className="text-white/60 hover:text-white mb-6 inline-flex items-center gap-2 font-light transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to Event Details
+            </button>
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${
+                  formData.type === "FREE"
+                    ? "bg-blue-500/20 text-blue-300"
+                    : "bg-purple-500/20 text-purple-300"
+                }`}>
+                  {formData.type === "FREE" ? "Free Plan" : "noFlake Plan"}
+                </span>
+              </div>
+              <h1 className="text-5xl font-light text-white mb-3 tracking-tight">Participant Information</h1>
+              <p className="text-gray-300 font-light">
+                Configure what information you want to collect from participants when they join your event
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/10">
+            <h2 className="text-2xl font-light text-white mb-6 tracking-tight">Predefined Fields</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+              {predefinedFields.map((field) => {
+                const isAdded = formData.participantFields.some(f => f.id === field.id);
+                return (
+                  <button
+                    key={field.id}
+                    type="button"
+                    onClick={() => !isAdded && addPredefinedField(field.id)}
+                    disabled={isAdded}
+                    className={`px-4 py-3 rounded-xl border-2 transition-all text-sm font-medium ${
+                      isAdded
+                        ? "bg-white/5 border-white/10 text-gray-500 cursor-not-allowed"
+                        : "bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    {field.label}
+                    {isAdded && " ✓"}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              onClick={addCustomField}
+              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all text-sm font-medium"
+            >
+              + Add Custom Field
+            </button>
+          </div>
+
+          {formData.participantFields.length > 0 && (
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/10">
+              <h2 className="text-2xl font-light text-white mb-6 tracking-tight">Configured Fields</h2>
+              <div className="space-y-4">
+                {formData.participantFields.map((field, index) => (
+                  <div key={index} className="bg-white/5 rounded-xl p-5 border border-white/10">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          value={field.label}
+                          onChange={(e) => updateParticipantField(index, { label: e.target.value })}
+                          className="w-full px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/20 transition-all font-light mb-3"
+                          placeholder="Field label"
+                        />
+                        <div className="flex items-center gap-4">
+                          <label className="flex items-center gap-2 text-gray-300 text-sm font-light">
+                            <input
+                              type="checkbox"
+                              checked={field.required}
+                              onChange={(e) => updateParticipantField(index, { required: e.target.checked })}
+                              className="w-4 h-4 rounded border-white/20 bg-white/5 text-purple-600 focus:ring-purple-500"
+                            />
+                            Required
+                          </label>
+                          <span className="text-gray-400 text-xs font-light">
+                            Type: {field.type}
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeParticipantField(index)}
+                        className="ml-4 p-2 text-red-400 hover:text-red-300 transition-colors"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {formData.participantFields.length === 0 && (
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 mb-8 text-center">
+              <p className="text-blue-200 font-light">
+                No fields configured. Participants will only need to RSVP without providing additional information.
+              </p>
+            </div>
+          )}
+
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-5 mb-6">
+              <p className="text-red-200 font-light">{error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="flex gap-4 pt-4">
+              <button
+                type="submit"
+                disabled={(formData.type === "STAKE" && (isCreating || isConfirming || !isConnected)) || !!success}
+                className="flex-1 bg-white text-purple-900 px-6 py-3.5 rounded-xl font-medium hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              >
+                {formData.type === "STAKE" && (isCreating || isConfirming)
+                  ? "Creating..."
+                  : success
+                  ? "Created!"
+                  : "Create Event"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep("event-details")}
+                className="px-6 py-3.5 rounded-xl font-medium bg-white/5 text-white hover:bg-white/10 transition-all border border-white/10"
+              >
+                Back
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // This should not be reached, but TypeScript needs it
+  return null;
 }

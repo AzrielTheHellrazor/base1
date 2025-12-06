@@ -27,23 +27,17 @@ export default function Home() {
       </header>
 
       <main className="container mx-auto px-6 py-12 max-w-5xl">
+        {/* Hero Section */}
         <div className="text-center mb-20">
           <h1 className="text-7xl md:text-8xl font-light text-white mb-6 tracking-tighter">
             noFlake
           </h1>
-          <p className="text-2xl md:text-3xl font-light text-gray-200 mb-6 tracking-tight">
-            No flakes, just stakes
-          </p>
-          <p className="text-lg text-gray-300 mb-4 max-w-2xl mx-auto font-light leading-relaxed">
-            Create events with optional staking. Choose free RSVP or stake to commit.
-          </p>
-          <p className="text-sm text-gray-400 mb-12 max-w-xl mx-auto font-light">
-            <strong className="text-white">Free Plan:</strong> Simple RSVP, no commitment required.<br />
-            <strong className="text-white">No Flake Plan:</strong> Stake USDC to commit. No-shows forfeit their deposit, which supports the bill for others.
+          <p className="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+            noFlake lets you host free events or stake-backed "no-flake" events on Base. Share a simple link, collect the info you need from guests, and turn casual maybes into real commitments.
           </p>
           
           {fid && (
-            <div className="inline-block bg-white/5 backdrop-blur-sm rounded-2xl px-6 py-3 mb-12 border border-white/10">
+            <div className="inline-block bg-white/5 backdrop-blur-sm rounded-2xl px-6 py-3 mb-8 border border-white/10">
               <p className="text-white/90 font-light text-sm">
                 Welcome back, FID: {fid}
                 {user?.username && ` (@${user.username})`}
@@ -51,83 +45,125 @@ export default function Home() {
             </div>
           )}
 
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
               href="/events/create"
-              className="bg-white text-purple-900 px-8 py-3.5 rounded-xl font-medium text-base hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl"
+              className="bg-white text-purple-900 px-8 py-3.5 rounded-xl font-medium text-base hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl w-full sm:w-auto"
             >
-              Create Event
+              Create event
             </Link>
             <Link
               href="/events"
-              className="bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-xl font-medium text-base hover:bg-white/20 transition-all border border-white/20"
+              className="bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-xl font-medium text-base hover:bg-white/20 transition-all border border-white/20 w-full sm:w-auto"
             >
-              Browse Events
+              Browse events
             </Link>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all group">
-            <div className="w-12 h-12 bg-white/10 rounded-xl mb-6 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-              </svg>
+        {/* Why noFlake? Section */}
+        <div className="mb-20">
+          <h2 className="text-4xl md:text-5xl font-light text-white mb-12 text-center tracking-tight">
+            Why noFlake?
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all">
+              <h3 className="text-xl font-medium text-white mb-3 tracking-tight">
+                Crypto-native by default
+              </h3>
+              <p className="text-gray-300 text-sm font-light leading-relaxed">
+                Built on Base, so your events and commitments live onchain – not lost in group chats.
+              </p>
             </div>
-            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Create Events</h3>
-            <p className="text-gray-300 text-sm font-light leading-relaxed">
-              Choose between Free Plan (simple RSVP) or No Flake Plan (stake to commit). Set details, location, and time.
-            </p>
-          </div>
-          
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all group">
-            <div className="w-12 h-12 bg-white/10 rounded-xl mb-6 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+            
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all">
+              <h3 className="text-xl font-medium text-white mb-3 tracking-tight">
+                Free or stake-backed events
+              </h3>
+              <p className="text-gray-300 text-sm font-light leading-relaxed">
+                Host casual free events, or turn on the noFlake plan where guests stake a small amount when they say "I'm in."
+              </p>
             </div>
-            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Join & Commit</h3>
-            <p className="text-gray-300 text-sm font-light leading-relaxed">
-              For No Flake events, stake USDC to commit. Your deposit ensures you show up, or it supports others who do.
-            </p>
-          </div>
-          
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all group">
-            <div className="w-12 h-12 bg-white/10 rounded-xl mb-6 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all">
+              <h3 className="text-xl font-medium text-white mb-3 tracking-tight">
+                Simple links, serious RSVPs
+              </h3>
+              <p className="text-gray-300 text-sm font-light leading-relaxed">
+                Share one clean event page, collect the info you need, and make it easy for people to actually show up.
+              </p>
             </div>
-            <h3 className="font-medium text-white mb-3 text-lg tracking-tight">Show Up & Get Rewarded</h3>
-            <p className="text-gray-300 text-sm font-light leading-relaxed">
-              Check in at the event. For No Flake events, attendees split the pot from no-shows. Simple and fair.
-            </p>
           </div>
         </div>
 
-        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-10 border border-white/10">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-light text-white mb-4 tracking-tight">How It Works</h2>
-            <div className="space-y-6 text-left">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-sm">1</div>
-                <div>
-                  <h4 className="text-white font-medium mb-1">Choose Your Plan</h4>
-                  <p className="text-gray-300 text-sm font-light">Create a Free event (simple RSVP) or a No Flake event (stake USDC to commit).</p>
+        {/* How noFlake works Section */}
+        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-10 md:p-12 border border-white/10">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-light text-white mb-4 text-center tracking-tight">
+              How noFlake works
+            </h2>
+            <p className="text-gray-300 text-center mb-12 font-light text-lg">
+              From idea to onchain commitment in a few simple steps.
+            </p>
+            
+            <div className="space-y-6">
+              <div className="flex gap-4 md:gap-6">
+                <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-lg md:text-xl">
+                  1
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-white font-medium mb-2 text-lg">Choose your plan</h4>
+                  <p className="text-gray-300 text-sm font-light leading-relaxed">
+                    Pick between a free event or a noFlake stake-backed event on Base.
+                  </p>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-sm">2</div>
-                <div>
-                  <h4 className="text-white font-medium mb-1">Join & Commit</h4>
-                  <p className="text-gray-300 text-sm font-light">For Free events, simply RSVP. For No Flake events, stake USDC to show you're serious.</p>
+              
+              <div className="flex gap-4 md:gap-6">
+                <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-lg md:text-xl">
+                  2
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-white font-medium mb-2 text-lg">Create your event</h4>
+                  <p className="text-gray-300 text-sm font-light leading-relaxed">
+                    Add the basics – title, description, time, place – and configure which info you want to collect from each guest.
+                  </p>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-sm">3</div>
-                <div>
-                  <h4 className="text-white font-medium mb-1">Show Up & Benefit</h4>
-                  <p className="text-gray-300 text-sm font-light">Attendees check in at the event. For No Flake events, those who show up split the pot from no-shows.</p>
+              
+              <div className="flex gap-4 md:gap-6">
+                <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-lg md:text-xl">
+                  3
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-white font-medium mb-2 text-lg">Share the link</h4>
+                  <p className="text-gray-300 text-sm font-light leading-relaxed">
+                    Send your event page to friends or your crypto community on Base app, Farcaster, Telegram, X, and more.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex gap-4 md:gap-6">
+                <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-lg md:text-xl">
+                  4
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-white font-medium mb-2 text-lg">Guests join and commit</h4>
+                  <p className="text-gray-300 text-sm font-light leading-relaxed">
+                    Guests fill out your registration form. For noFlake events, they lock a small deposit (e.g. 5 USDC on Base) when they say "I'm coming."
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex gap-4 md:gap-6">
+                <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white font-light text-lg md:text-xl">
+                  5
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-white font-medium mb-2 text-lg">Show up day</h4>
+                  <p className="text-gray-300 text-sm font-light leading-relaxed">
+                    You see who committed and who joined. Over time we can plug in check-in, payouts, and bill-splitting – but for now the focus is clear, stake-backed RSVPs.
+                  </p>
                 </div>
               </div>
             </div>

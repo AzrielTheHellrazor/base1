@@ -415,7 +415,7 @@ export default function EventDetailPage() {
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-4">
                 <span className="px-3 py-1.5 rounded-full text-sm font-medium bg-purple-500/20 text-purple-300">
-                  No Flake Plan
+                  noFlake Plan
                 </span>
                 {event.settled && (
                   <span className="px-3 py-1.5 rounded-full text-sm font-medium bg-gray-500/20 text-gray-400">

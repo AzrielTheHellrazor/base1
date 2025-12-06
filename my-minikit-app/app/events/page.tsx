@@ -118,7 +118,7 @@ export default function EventsPage() {
                             ? "bg-purple-500/20 text-purple-300"
                             : "bg-blue-500/20 text-blue-300"
                         }`}>
-                          {event.type === "STAKE" ? "No Flake" : "Free"}
+                          {event.type === "STAKE" ? "noFlake" : "Free"}
                         </span>
                         {isPast && (
                           <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-500/20 text-gray-400">
