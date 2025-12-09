@@ -1,4 +1,4 @@
-# Commit2ShowUp - Production Ready Farcaster Mini App
+# noFlake - Stake-Backed Events on Base
 
 ## 🚀 Quick Start
 
@@ -16,7 +16,6 @@ Open http://localhost:3000 - **That's it!**
 - ✅ Next.js 14 (App Router) + TypeScript
 - ✅ Tailwind CSS (mobile-first, responsive)
 - ✅ Farcaster Mini App SDK integration
-- ✅ Farcaster Frames v2 support (frog)
 - ✅ Base Sepolia blockchain (viem + wagmi)
 
 ### **Smart Contracts**
@@ -32,10 +31,9 @@ Open http://localhost:3000 - **That's it!**
 - ✅ `/events/[id]` - Event details, join, check-in
 
 ### **Farcaster Integration**
-- ✅ `/api/frames/event/[id]` - Frames for viewing events in casts
-- ✅ Join & check-in actions from Farcaster
+- ✅ Mini app ready (works in Farcaster clients)
+- ✅ User authentication via Quick Auth
 - ✅ Deep links to web app
-- ✅ Quick Auth endpoint for user verification
 
 ---
 
@@ -45,8 +43,7 @@ Open http://localhost:3000 - **That's it!**
 my-minikit-app/
 ├── app/
 │   ├── api/
-│   │   ├── auth/route.ts          # Farcaster Quick Auth
-│   │   └── frames/route.tsx      # Farcaster Frames v2
+│   │   └── auth/route.ts          # Farcaster Quick Auth
 │   ├── events/
 │   │   ├── page.tsx               # Events list
 │   │   ├── create/page.tsx        # Create event
@@ -126,7 +123,7 @@ NEXT_PUBLIC_ONCHAINKIT_API_KEY=
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Blockchain**: Base Sepolia, viem, wagmi
-- **Farcaster**: Miniapp SDK, Frames v2 (frog)
+- **Farcaster**: Miniapp SDK, Quick Auth
 - **Contracts**: Solidity 0.8.20, Hardhat, OpenZeppelin
 
 ---
@@ -146,9 +143,8 @@ NEXT_PUBLIC_ONCHAINKIT_API_KEY=
 
 ### **Farcaster Integration**
 - ✅ Mini app ready (works in Farcaster clients)
-- ✅ Frames v2 support (can be embedded in casts)
 - ✅ User authentication via Quick Auth
-- ✅ Deep linking between frames and web app
+- ✅ Deep linking to web app
 
 ---
 
@@ -183,7 +179,6 @@ The project is **production-ready** and **fully functional**. Just run `bun run 
 - App works without contracts - perfect for UI development
 - Contract addresses show helpful messages if not configured
 - Farcaster integration works in Farcaster clients
-- Frames work standalone - can be embedded in casts
 - All TypeScript types are properly defined
 - Error boundaries and loading states included
 
