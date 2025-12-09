@@ -29,7 +29,7 @@ export default function Home() {
             noFlake
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-            noFlake lets you host free events or stake-backed "no-flake" events on Base. Share a simple link, collect the info you need from guests, and turn casual maybes into real commitments.
+            noFlake lets you host free events or stake-backed &quot;no-flake&quot; events on Base. Share a simple link, collect the info you need from guests, and turn casual maybes into real commitments.
           </p>
           
           {fid && (
@@ -77,7 +77,7 @@ export default function Home() {
                 Free or stake-backed events
               </h3>
               <p className="text-gray-300 text-sm font-light leading-relaxed">
-                Host casual free events, or turn on the noFlake plan where guests stake a small amount when they say "I'm in."
+                Host casual free events, or turn on the noFlake plan where guests stake a small amount when they say &quot;I&apos;m in.&quot;
               </p>
             </div>
             
@@ -146,7 +146,7 @@ export default function Home() {
                 <div className="flex-1">
                   <h4 className="text-white font-medium mb-2 text-lg">Guests join and commit</h4>
                   <p className="text-gray-300 text-sm font-light leading-relaxed">
-                    Guests fill out your registration form. For noFlake events, they lock a small deposit (e.g. 5 USDC on Base) when they say "I'm coming."
+                    Guests fill out your registration form. For noFlake events, they lock a small deposit (e.g. 5 USDC on Base) when they say &quot;I&apos;m coming.&quot;
                   </p>
                 </div>
               </div>

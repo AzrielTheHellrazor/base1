@@ -14,7 +14,6 @@ export function RootProvider({ children }: { children: ReactNode }) {
         },
         wallet: {
           display: "modal",
-          preference: "coinbaseWallet", // Coinbase Wallet'ı önceliklendir
         },
       }}
       miniKit={{
