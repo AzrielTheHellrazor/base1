@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from "react";
 import Link from "next/link";
-import { Wallet } from "@coinbase/onchainkit/wallet";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useQuickAuth } from "@coinbase/onchainkit/minikit";
 
@@ -22,9 +21,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-      <header className="flex justify-end p-6">
-        <Wallet />
-      </header>
 
       <main className="container mx-auto px-6 py-12 max-w-5xl">
         {/* Hero Section */}
