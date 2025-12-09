@@ -2,6 +2,9 @@
   "name": "noflake",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -20,6 +23,7 @@
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "vercel": "^49.1.2",
     "viem": "^2.31.6",
     "wagmi": "^2.16.3"
   },
