@@ -13,7 +13,20 @@ type Step = "plan-selection" | "event-details" | "participant-fields";
 
 export default function CreateEventPage() {
   const router = useRouter();
-  const { address, isConnected } = useAccount();
+  const account = useAccount();
+  const { address, isConnected, status, connector } = account;
+  
+  // Debug: Log account state to find why isConnected is false
+  useEffect(() => {
+    console.log("🔍 useAccount debug:", {
+      address,
+      isConnected,
+      status, // 'disconnected' | 'connecting' | 'connected' | 'reconnecting'
+      connector: connector?.name,
+      connectorId: connector?.id,
+      fullAccount: account
+    });
+  }, [address, isConnected, status, connector, account]);
   const [step, setStep] = useState<Step>("plan-selection");
   const [formData, setFormData] = useState({
     title: "",
