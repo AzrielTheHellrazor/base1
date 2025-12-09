@@ -6,7 +6,7 @@ import { useQuickAuth } from "@coinbase/onchainkit/minikit";
 
 export default function Home() {
   const { setMiniAppReady, isMiniAppReady, context } = useMiniKit();
-  const { data: authData, isLoading: authLoading } = useQuickAuth<{
+  const { data: authData } = useQuickAuth<{
     userFid: string;
   }>("/api/auth");
 

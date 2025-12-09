@@ -94,14 +94,18 @@ export default function EventDetailPage() {
     isPending: isJoining,
   } = useWriteContract();
 
-  const { isLoading: isJoinConfirming } = useWaitForTransactionReceipt({
+  const { isLoading: isJoinConfirming, isSuccess: isJoinSuccess } = useWaitForTransactionReceipt({
     hash: joinHash,
-    onSuccess: () => {
+  });
+
+  useEffect(() => {
+    if (isJoinSuccess) {
       setSuccess("Successfully joined event!");
       refetchEvent();
       refetchParticipant();
-    },
-  });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isJoinSuccess]);
 
   // Approve USDC
   const {
@@ -110,12 +114,15 @@ export default function EventDetailPage() {
     isPending: isApproving,
   } = useWriteContract();
 
-  const { isLoading: isApproveConfirming } = useWaitForTransactionReceipt({
+  const { isLoading: isApproveConfirming, isSuccess: isApproveSuccess } = useWaitForTransactionReceipt({
     hash: approveHash,
-    onSuccess: () => {
-      setSuccess("USDC approved! You can now join the event.");
-    },
   });
+
+  useEffect(() => {
+    if (isApproveSuccess) {
+      setSuccess("USDC approved! You can now join the event.");
+    }
+  }, [isApproveSuccess]);
 
   // Check in
   const {
@@ -124,14 +131,18 @@ export default function EventDetailPage() {
     isPending: isCheckingIn,
   } = useWriteContract();
 
-  const { isLoading: isCheckInConfirming } = useWaitForTransactionReceipt({
+  const { isLoading: isCheckInConfirming, isSuccess: isCheckInSuccess } = useWaitForTransactionReceipt({
     hash: checkInHash,
-    onSuccess: () => {
+  });
+
+  useEffect(() => {
+    if (isCheckInSuccess) {
       setSuccess("Successfully checked in!");
       refetchEvent();
       refetchParticipant();
-    },
-  });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCheckInSuccess]);
 
   // Load event metadata
   useEffect(() => {
@@ -166,7 +177,8 @@ export default function EventDetailPage() {
       return;
     }
 
-    const depositAmount = eventData.depositAmount as bigint;
+    const event = eventData as unknown as Event;
+    const depositAmount = event.depositAmount as bigint;
     const balance = usdcBalance as bigint;
     const allowance = usdcAllowance as bigint;
 
@@ -220,8 +232,8 @@ export default function EventDetailPage() {
       setRsvps([...rsvps, address]);
       setSuccess("Successfully RSVP'd! See you there!");
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
-      setError(err.message || "Failed to RSVP");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to RSVP");
     } finally {
       setIsRSVPing(false);
     }
@@ -351,7 +363,7 @@ export default function EventDetailPage() {
                 </button>
               ) : (
                 <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-6 text-center">
-                  <p className="text-green-200 font-light">You've RSVP'd to this event!</p>
+                  <p className="text-green-200 font-light">You&apos;ve RSVP&apos;d to this event!</p>
                 </div>
               )}
             </div>
@@ -445,7 +457,7 @@ export default function EventDetailPage() {
                 <div className="text-gray-400 text-xs font-light mb-1 uppercase tracking-wider">Deposit Amount</div>
                 <div className="text-white font-medium text-lg">{depositAmount} USDC</div>
                 <p className="text-gray-400 text-xs mt-1 font-light">
-                  If you don't show up, your stake supports the bill for others
+                  If you don&apos;t show up, your stake supports the bill for others
                 </p>
               </div>
               <div>

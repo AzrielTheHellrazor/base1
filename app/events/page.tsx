@@ -1,13 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {  useAccount } from "wagmi";
 import { Event, EventMetadata } from "@/lib/types";
 import { EventStorage } from "@/lib/eventStorage";
 import { initializeSampleEvent } from "@/lib/seedSampleEvent";
 
 export default function EventsPage() {
-  const { address } = useAccount();
   const [events, setEvents] = useState<(EventMetadata & { onChainData?: Event })[]>([]);
   const [loading, setLoading] = useState(true);
 

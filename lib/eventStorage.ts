@@ -1,4 +1,4 @@
-import { EventMetadata, EventType } from "./types";
+import { EventMetadata} from "./types";
 
 const STORAGE_KEY = "noflake_events";
 

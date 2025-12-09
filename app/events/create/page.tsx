@@ -53,9 +53,6 @@ export default function CreateEventPage() {
     setStep("event-details");
   };
 
-  const handleEventDetailsNext = () => {
-    setStep("participant-fields");
-  };
 
   const addParticipantField = (fieldId: ParticipantFieldId, label: string, type: ParticipantFieldType, required: boolean) => {
     setFormData({
@@ -173,8 +170,8 @@ export default function CreateEventPage() {
           router.push(`/events/${eventMetadata.id}`);
         }, 1500);
       }
-    } catch (err: any) {
-      setError(err.message || "Failed to create event");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to create event");
     }
   };
 
@@ -183,7 +180,7 @@ export default function CreateEventPage() {
     if (isSuccess && formData.type === "STAKE" && receipt && address) {
       // Parse EventCreated event from transaction receipt
       try {
-        const eventCreatedLog = receipt.logs.find((log: any) => {
+        const eventCreatedLog = receipt.logs.find((log: { address?: string; topics?: string[] }) => {
           return log.address?.toLowerCase() === EVENT_STAKING_ADDRESS?.toLowerCase() &&
                  log.topics && log.topics.length >= 2;
         });
@@ -198,7 +195,7 @@ export default function CreateEventPage() {
             });
 
             if (decoded.eventName === "EventCreated") {
-              const onChainEventId = (decoded.args as any).eventId?.toString();
+              const onChainEventId = (decoded.args as { eventId?: bigint }).eventId?.toString();
 
               // Create metadata and link it
               const eventMetadata = EventStorage.createEvent({
@@ -219,7 +216,7 @@ export default function CreateEventPage() {
               }, 1500);
               return;
             }
-          } catch (decodeError) {
+          } catch {
             // If decoding fails, try extracting from topics directly
             if (eventCreatedLog.topics && eventCreatedLog.topics.length >= 2 && address) {
               const eventIdHex = eventCreatedLog.topics[1];
@@ -387,7 +384,7 @@ export default function CreateEventPage() {
               <div className="space-y-4 mb-8">
                 <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4 mb-4">
                   <p className="text-purple-200 text-sm font-light leading-relaxed">
-                    <strong className="text-white">How it works:</strong> Participants stake USDC when they RSVP. If they don't show up, their stake is forfeited and distributed to attendees who did show up. This ensures commitment and rewards reliability.
+                    <strong className="text-white">How it works:</strong> Participants stake USDC when they RSVP. If they don&apos;t show up, their stake is forfeited and distributed to attendees who did show up. This ensures commitment and rewards reliability.
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
@@ -403,7 +400,7 @@ export default function CreateEventPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   <p className="text-gray-300 font-light leading-relaxed">
-                    <strong className="text-white">No-show forfeit</strong> — If someone doesn't show up, their stake supports the bill for others
+                    <strong className="text-white">No-show forfeit</strong> — If someone doesn&apos;t show up, their stake supports the bill for others
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
@@ -576,7 +573,7 @@ export default function CreateEventPage() {
                 required={formData.type === "STAKE"}
             />
               <p className="text-gray-400 text-xs mt-2 font-light">
-                Amount participants must stake to join. If they don't show up, this supports the bill for others.
+                Amount participants must stake to join. If they don&apos;t show up, this supports the bill for others.
               </p>
           </div>
           )}
