@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useQuickAuth } from "@coinbase/onchainkit/minikit";
 
+
 export default function Home() {
   const { setMiniAppReady, isMiniAppReady, context } = useMiniKit();
   const { data: authData } = useQuickAuth<{

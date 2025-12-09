@@ -3,13 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { formatUnits } from "viem";
-import USDC_DATA from "../../../abi/MockUSDC.json";
-import EVENT_STAKING_DATA from "../../../abi/EventStaking.json";
-
-const USDC_ADDRESS = USDC_DATA.contractAddress;
-const USDC_ABI = USDC_DATA.abi;
-const EVENT_STAKING_ADDRESS = EVENT_STAKING_DATA.contractAddress;
-const EVENT_STAKING_ABI = EVENT_STAKING_DATA.abi;
+import { EVENT_STAKING_ADDRESS, EVENT_STAKING_ABI, USDC_ADDRESS, USDC_ABI } from "@/lib/contracts";
 import { Event, ParticipantInfo, EventMetadata } from "@/lib/types";
 import { EventStorage } from "@/lib/eventStorage";
 import Link from "next/link";
