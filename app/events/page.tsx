@@ -1,12 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useReadContract, useAccount } from "wagmi";
-import { EVENT_STAKING_ADDRESS, EVENT_STAKING_ABI } from "@/lib/contracts";
+import {  useAccount } from "wagmi";
 import { Event, EventMetadata } from "@/lib/types";
 import { EventStorage } from "@/lib/eventStorage";
 import { initializeSampleEvent } from "@/lib/seedSampleEvent";
-import { formatUnits } from "viem";
 
 export default function EventsPage() {
   const { address } = useAccount();

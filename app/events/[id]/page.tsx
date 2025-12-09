@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { parseUnits, formatUnits } from "viem";
-import { EVENT_STAKING_ADDRESS, EVENT_STAKING_ABI, USDC_ADDRESS, USDC_ABI } from "@/lib/contracts";
+import { formatUnits } from "viem";
+import { contractAddress as USDC_ADDRESS, abi as USDC_ABI } from "../../../abi/MockUSDC.json";
+import { contractAddress as EVENT_STAKING_ADDRESS, abi as EVENT_STAKING_ABI } from "../../../abi/EventStaking.json";
 import { Event, ParticipantInfo, EventMetadata } from "@/lib/types";
 import { EventStorage } from "@/lib/eventStorage";
 import Link from "next/link";
